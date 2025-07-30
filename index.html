@@ -96,8 +96,32 @@
   <script>
     document.getElementById("findingForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      alert("✅ Form submitted! (Backend connection coming next)");
-      // We'll wire this up to Google Sheets using Apps Script or another endpoint
+
+      const formData = {
+        Name: document.getElementById("name").value,
+        Zone: document.getElementById("zone").value,
+        Date: document.getElementById("date").value,
+        Stake: document.getElementById("stake").value,
+        Activity: document.getElementById("activity").value,
+        Notes: document.getElementById("notes").value
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbzt4v1AhCZjjalTd9x5G836PkadlpWa-3P468dKIqJekkM4nuaIGWt6Rali14GlTbfm0Q/exec", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert("✅ Submission successful!");
+        document.getElementById("findingForm").reset();
+      })
+      .catch(error => {
+        alert("❌ Submission failed. Please try again.");
+        console.error("Error:", error);
+      });
     });
   </script>
 </body>
